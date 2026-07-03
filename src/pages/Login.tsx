@@ -11,7 +11,7 @@ import logo from '@/assets/logo.png'
 export function Login() {
   const { session, loading } = useAuth()
   const navigate = useNavigate()
-  const [email, setEmail] = useState('')
+  const [discord, setDiscord] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
@@ -22,9 +22,18 @@ export function Login() {
     e.preventDefault()
     setSubmitting(true)
     setError(null)
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
+
+    const { data: email, error: lookupError } = await supabase.rpc('get_login_email', { p_discord: discord })
+
+    if (lookupError || !email) {
+      setSubmitting(false)
+      setError('Identifiants incorrects.')
+      return
+    }
+
+    const { error: authError } = await supabase.auth.signInWithPassword({ email, password })
     setSubmitting(false)
-    if (error) {
+    if (authError) {
       setError('Identifiants incorrects.')
       return
     }
@@ -56,14 +65,14 @@ export function Login() {
       <Card className="relative z-10 w-full max-w-sm p-7">
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div>
-            <label className="text-xs uppercase tracking-[2px] text-white/40 font-semibold mb-1.5 block">Email</label>
+            <label className="text-xs uppercase tracking-[2px] text-white/40 font-semibold mb-1.5 block">Discord</label>
             <input
-              type="email"
+              type="text"
               required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={discord}
+              onChange={(e) => setDiscord(e.target.value)}
               className="w-full rounded-lg bg-white/5 border border-white/12 px-3.5 py-2.5 text-sm text-white outline-none focus:border-gold/50 transition-colors"
-              placeholder="prenom@ls-fonderie.dev"
+              placeholder="pseudo#0001"
             />
           </div>
           <div>

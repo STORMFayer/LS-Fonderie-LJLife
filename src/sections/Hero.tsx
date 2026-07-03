@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import { useNavigate } from 'react-router-dom'
 import { ArrowRight, ChevronDown } from 'lucide-react'
 import { Embers } from '@/components/Embers'
 import { Badge } from '@/components/ui/Badge'
@@ -7,6 +8,8 @@ import logo from '@/assets/logo.png'
 import lingot from '@/assets/lingot.png'
 
 export function Hero() {
+  const navigate = useNavigate()
+
   return (
     <section
       id="top"
@@ -46,7 +49,7 @@ export function Hero() {
         </p>
 
         <div className="flex flex-col sm:flex-row items-center gap-4">
-          <Button size="lg" variant="gold" onClick={() => document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' })}>
+          <Button size="lg" variant="gold" onClick={() => navigate('/commander')}>
             Commander un lingot <ArrowRight size={18} />
           </Button>
           <Button size="lg" variant="ghost" onClick={() => document.querySelector('#produits')?.scrollIntoView({ behavior: 'smooth' })}>

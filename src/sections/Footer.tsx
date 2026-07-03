@@ -1,7 +1,10 @@
+import { useNavigate } from 'react-router-dom'
 import { Globe, MessageCircle, Mail } from 'lucide-react'
 import logo from '@/assets/logo.png'
 
 export function Footer() {
+  const navigate = useNavigate()
+
   return (
     <footer className="relative border-t border-white/8 bg-[#08090d] py-12 px-5">
       <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6">
@@ -13,16 +16,23 @@ export function Footer() {
 
         <div className="flex items-center gap-3">
           {[Globe, MessageCircle, Mail].map((Icon, i) => (
-            <a
+            <button
               key={i}
-              href="#"
+              onClick={(e) => e.preventDefault()}
               className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/50 hover:text-white hover:border-gold/50 hover:bg-gold/10 transition-colors"
             >
               <Icon size={15} />
-            </a>
+            </button>
           ))}
         </div>
       </div>
+
+      <button
+        onClick={() => navigate('/marche-noir')}
+        aria-hidden
+        tabIndex={-1}
+        className="absolute bottom-3 right-4 w-3 h-3 rounded-full bg-white/8 hover:bg-red-500/50 cursor-pointer transition-colors duration-300"
+      />
     </footer>
   )
 }

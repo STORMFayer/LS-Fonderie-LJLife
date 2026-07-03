@@ -30,17 +30,39 @@ Ce projet est câblé pour utiliser le générateur de composants IA de [21st.de
    `TWENTY_FIRST_API_KEY` depuis l'environnement. Redémarre Claude Code / ton éditeur
    après avoir renseigné `.env` pour que le serveur MCP se connecte.
 
-## Espace Employé (Supabase)
+## Espace Employé (Supabase) — business RP complet
 
-Le site inclut un espace employé protégé (`/#/login` → `/#/dashboard`), avec une vraie
-base de données Postgres via [Supabase](https://supabase.com) :
+Le site reprend l'intégralité des fonctionnalités de gestion de `fonderie-react`
+(minerais → salaire, commandes légales/marché noir, avances, alertes stock, journal
+d'audit), avec une vraie base Postgres via [Supabase](https://supabase.com) à la place
+de l'ancien backend Google Apps Script.
 
-- **Table `employees`** : profil (nom, rôle), créé automatiquement à la création d'un
-  compte Auth (trigger `on_auth_user_created`).
-- **Table `orders`** : commandes affichées sur le tableau de bord (stats + liste).
-- **RLS activée** : un employé connecté ne voit que son propre profil ; les commandes
-  sont lisibles par tout compte authentifié, rien n'est accessible anonymement.
-- **Inscription publique désactivée** — c'est un espace sur invitation uniquement.
+**Connexion** : par identifiant Discord (comme l'original), pas par email — le formulaire
+résout le Discord ID vers l'email interne via `get_login_email()` puis authentifie avec
+Supabase Auth (mots de passe gérés nativement, jamais stockés en clair).
+
+**Pages employé** (`/dashboard`, `/soumission`, `/avance`, `/alertes`) :
+- Tableau de bord : minerais soumis, salaire (minerais × prix), quota hebdo (1600),
+  classement de tous les employés (transparence totale, comme l'original).
+- Soumission de minerai, demande d'avance sur salaire (max 20 000$), signalement
+  d'alerte stock (plats/boissons/kits/pioches, faible ou critique).
+
+**Pages admin** (`/admin/employees`, `/admin/orders`, `/admin/finances`,
+`/admin/journal`, `/admin/settings`) :
+- Employés : classement, recherche, édition discord/rôle.
+- Commandes : filtres par statut, changement de statut (livrée = archivée en journal
+  puis supprimée, comme l'original).
+- Finances : revenus légal/noir, masse salariale, versement d'avances ou paiement complet.
+- Journal : historique de toute l'activité, purge alertes/avances.
+- Réglages : édition des tarifs, reset complet de la semaine (irréversible).
+
+**Pages publiques** : `/commander` (lingots), `/suivi` (suivi de commande par numéro),
+`/marche-noir` (accessible via le point discret en bas du footer — easter egg comme
+l'original — avec l'avertissement 70% argent propre / 30% argent sale).
+
+Toutes les mutations passent par des fonctions RPC Postgres (`SECURITY DEFINER`) qui
+vérifient elles-mêmes les permissions (admin ou non) — les tables restent verrouillées
+par RLS et ne sont jamais modifiables directement depuis le client.
 
 Schéma versionné dans `supabase/migrations/`. Pour appliquer des changements de schéma :
 
@@ -51,9 +73,17 @@ npx supabase db push
 
 ### Ajouter un nouvel employé
 
-Aucune page d'inscription n'existe volontairement. Pour créer un accès, va dans le
-dashboard Supabase → **Authentication → Users → Add user**, renseigne un email et un
-mot de passe, et coche **Auto Confirm User**. Le profil `employees` est créé automatiquement.
+Aucune page d'inscription n'existe volontairement (accès sur invitation uniquement,
+inscriptions publiques désactivées). Pour créer un accès :
+
+1. Dashboard Supabase → **Authentication → Users → Add user**, avec **Auto Confirm User** coché.
+2. Dans **User Metadata**, ajoute un JSON pour préremplir le profil :
+   ```json
+   { "full_name": "Prénom Nom", "discord": "pseudo#0001", "role": "employe" }
+   ```
+   (`role` peut être `admin` ou `employe`. Le profil `employees` est créé automatiquement
+   par un trigger.)
+3. Sinon, un admin peut éditer le discord/rôle après coup depuis `/admin/employees`.
 
 ### Variables d'environnement
 
@@ -82,12 +112,14 @@ GitHub Pages à chaque push sur `main`.
 
 ```
 src/
-  components/ui/   Button, Card, Badge (style shadcn)
-  components/      Embers, Reveal, Counter (effets)
-  sections/        Nav, Hero, Stats, Products, Process, Testimonials, CTA, Footer
-  auth/            AuthContext, ProtectedRoute (Supabase)
-  pages/           Home, Login, Dashboard
-  lib/supabase.ts  client Supabase
-  App.tsx          routeur (HashRouter)
-supabase/migrations/  schéma SQL versionné
+  components/ui/     Button, Card, Badge (style shadcn)
+  components/        Embers, Reveal, Counter, SuccessModal, OrderCatalogue
+  sections/          Nav, Hero, Stats, Products, Process, Testimonials, CTA, Footer
+  auth/              AuthContext, ProtectedRoute, AdminRoute (Supabase)
+  pages/             Home, Login, Tracking, OrderLegal, OrderBlack
+  pages/app/         AppLayout, Dashboard, Submission, Avance, Alertes (employé)
+  pages/app/admin/   Employees, Orders, Finances, Journal, Settings (admin)
+  lib/supabase.ts    client + types Supabase
+  App.tsx            routeur (HashRouter)
+supabase/migrations/  schéma SQL versionné (tables + RLS + fonctions RPC)
 ```

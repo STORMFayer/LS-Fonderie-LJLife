@@ -1,9 +1,12 @@
+import { useNavigate } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
 import { Embers } from '@/components/Embers'
 import { Reveal } from '@/components/Reveal'
 import { Button } from '@/components/ui/Button'
 
 export function CTA() {
+  const navigate = useNavigate()
+
   return (
     <section id="contact" className="relative py-28 px-5 overflow-hidden">
       <div
@@ -19,15 +22,11 @@ export function CTA() {
           Contactez la forge et recevez votre devis en moins de 24h.
         </p>
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <Button
-            size="lg"
-            variant="gold"
-            onClick={() => (window.location.href = 'mailto:contact@ls-fonderie.dev')}
-          >
-            Nous contacter <ArrowRight size={18} />
+          <Button size="lg" variant="gold" onClick={() => navigate('/commander')}>
+            Commander <ArrowRight size={18} />
           </Button>
-          <Button size="lg" variant="outline" onClick={() => document.querySelector('#produits')?.scrollIntoView({ behavior: 'smooth' })}>
-            Voir les tarifs
+          <Button size="lg" variant="outline" onClick={() => navigate('/suivi')}>
+            Suivre ma commande
           </Button>
         </div>
       </Reveal>
