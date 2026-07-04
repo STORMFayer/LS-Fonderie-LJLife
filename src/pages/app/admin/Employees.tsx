@@ -64,6 +64,12 @@ export function Employees() {
     e.preventDefault()
     setAddError(null)
     setAddSuccess(null)
+
+    if (password.length < 8) {
+      setAddError('Mot de passe : 8 caractères minimum.')
+      return
+    }
+
     setSubmitting(true)
 
     const { data, error } = await supabase.functions.invoke('create-employee', {
@@ -111,7 +117,7 @@ export function Employees() {
         </div>
 
         {showAdd && (
-          <form onSubmit={handleAddEmployee} className="flex flex-col gap-4">
+          <form onSubmit={handleAddEmployee} noValidate className="flex flex-col gap-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="text-xs uppercase tracking-[2px] text-white/40 font-semibold mb-1.5 block">Prénom</label>
@@ -150,7 +156,6 @@ export function Employees() {
                 <input
                   type="password"
                   required
-                  minLength={8}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="8 caractères minimum"
