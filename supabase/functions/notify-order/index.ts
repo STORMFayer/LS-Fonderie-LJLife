@@ -27,6 +27,7 @@ Deno.serve(async (req) => {
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!
     const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
     const webhookUrl = Deno.env.get('DISCORD_WEBHOOK_URL')
+    const roleId = Deno.env.get('DISCORD_FONDERIE_ROLE_ID')
 
     if (!webhookUrl) return json({ success: false, error: 'Webhook non configuré' }, 500)
 
@@ -47,6 +48,8 @@ Deno.serve(async (req) => {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
+        content: roleId ? `<@&${roleId}>` : undefined,
+        allowed_mentions: { parse: ['roles'] },
         embeds: [
           {
             title: `${isBlack ? '💀' : '🏛️'} Nouvelle commande — ${order.numero}`,

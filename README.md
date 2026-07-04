@@ -106,12 +106,15 @@ message dans un salon Discord via une **Edge Function** (`supabase/functions/not
 - La fonction relit la commande via `service_role` (contourne les RLS côté serveur
   uniquement) et poste un embed (client, contact, articles, total, type) sur l'URL de
   webhook Discord stockée dans le secret `DISCORD_WEBHOOK_URL`.
+- Le message ping le rôle configuré dans le secret `DISCORD_FONDERIE_ROLE_ID`
+  (`<@&ROLE_ID>` + `allowed_mentions: { parse: ['roles'] }` pour garantir la notif).
 - Un échec de notification Discord n'empêche jamais la commande d'aboutir (appel best-effort).
 
-Configurer/modifier le webhook :
+Configurer/modifier le webhook ou le rôle à ping :
 
 ```bash
 npx supabase secrets set DISCORD_WEBHOOK_URL="https://discord.com/api/webhooks/..."
+npx supabase secrets set DISCORD_FONDERIE_ROLE_ID="123456789012345678"
 npx supabase functions deploy notify-order --use-api
 ```
 
