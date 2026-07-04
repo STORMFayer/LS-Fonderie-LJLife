@@ -38,7 +38,12 @@ export function Products() {
                   <div className="relative rounded-xl bg-gradient-to-br from-white/8 to-transparent p-6 mb-5 flex items-center justify-center overflow-hidden">
                     <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                       style={{ background: 'radial-gradient(circle at 50% 50%, rgba(255,155,61,0.25), transparent 70%)' }} />
-                    <img src={p.img} alt={p.name} className="w-28 h-28 object-contain relative z-10 drop-shadow-xl group-hover:scale-110 transition-transform duration-500" />
+                    <img
+                      src={p.img}
+                      alt={p.name}
+                      className="w-28 h-28 object-contain relative z-10 drop-shadow-xl group-hover:scale-110 transition-transform duration-500"
+                      style={p.name === 'Lingot de fer' ? { transform: 'translate(3%, -2%)' } : undefined}
+                    />
                   </div>
                   <h3 className="font-bold text-white text-lg mb-1.5">{p.name}</h3>
                   <p className="text-white/45 text-sm leading-relaxed mb-4 flex-1">{p.desc}</p>

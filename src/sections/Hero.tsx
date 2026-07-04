@@ -5,7 +5,6 @@ import { Embers } from '@/components/Embers'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import logo from '@/assets/logo.png'
-import lingot from '@/assets/lingot.png'
 
 export function Hero() {
   const navigate = useNavigate()
@@ -57,15 +56,6 @@ export function Hero() {
           </Button>
         </div>
       </motion.div>
-
-      <motion.img
-        src={lingot}
-        alt=""
-        aria-hidden
-        className="hidden lg:block absolute right-[8%] top-[30%] w-40 h-40 object-contain drop-shadow-2xl z-10"
-        animate={{ y: [0, -18, 0], rotate: [0, 4, 0] }}
-        transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
-      />
 
       <motion.div
         className="absolute bottom-8 z-10 flex flex-col items-center gap-1 text-white/30"

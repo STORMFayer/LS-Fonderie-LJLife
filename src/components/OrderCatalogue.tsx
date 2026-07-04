@@ -31,7 +31,7 @@ export function OrderCatalogue({
   }, [type])
 
   function setQty(key: string, qty: number) {
-    setCart((prev) => ({ ...prev, [key]: Math.max(0, qty) }))
+    setCart((prev) => ({ ...prev, [key]: Math.max(0, Number.isFinite(qty) ? Math.floor(qty) : 0) }))
   }
 
   const total = prices.reduce((s, p) => s + (cart[p.key] ?? 0) * p.price, 0)
@@ -83,7 +83,14 @@ export function OrderCatalogue({
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-10">
           {prices.map((p) => (
             <Card key={p.key} className="p-5 flex flex-col items-center text-center">
-              {productImages[p.key] && <img src={productImages[p.key]} alt={p.label} className="w-20 h-20 object-contain mb-3" />}
+              {productImages[p.key] && (
+                <img
+                  src={productImages[p.key]}
+                  alt={p.label}
+                  className="w-20 h-20 object-contain mb-3"
+                  style={p.key === 'lingot' ? { transform: 'translate(3%, -2%)' } : undefined}
+                />
+              )}
               <h3 className="text-white font-semibold mb-1">{p.label}</h3>
               <p className={`font-display font-black text-lg mb-4 ${accent}`}>{p.price.toLocaleString('fr-FR')} $/u</p>
               <div className="flex items-center gap-3">
@@ -93,7 +100,13 @@ export function OrderCatalogue({
                 >
                   <Minus size={14} />
                 </button>
-                <span className="w-8 text-center text-white font-bold">{cart[p.key] ?? 0}</span>
+                <input
+                  type="number"
+                  min={0}
+                  value={cart[p.key] ?? 0}
+                  onChange={(e) => setQty(p.key, Number(e.target.value))}
+                  className="w-14 text-center bg-white/5 border border-white/12 rounded-lg py-1 text-white font-bold outline-none focus:border-gold/50 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                />
                 <button
                   onClick={() => setQty(p.key, (cart[p.key] ?? 0) + 1)}
                   className="w-8 h-8 rounded-lg bg-white/8 text-white flex items-center justify-center hover:bg-white/15"
