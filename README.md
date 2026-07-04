@@ -73,17 +73,28 @@ npx supabase db push
 
 ### Ajouter un nouvel employé
 
-Aucune page d'inscription n'existe volontairement (accès sur invitation uniquement,
-inscriptions publiques désactivées). Pour créer un accès :
+Aucune page d'inscription publique n'existe volontairement (accès sur invitation
+uniquement). Un admin peut créer un compte directement depuis `/admin/employees` →
+**Nouveau compte** (prénom, nom, Discord ID, mot de passe, rôle).
 
-1. Dashboard Supabase → **Authentication → Users → Add user**, avec **Auto Confirm User** coché.
-2. Dans **User Metadata**, ajoute un JSON pour préremplir le profil :
-   ```json
-   { "full_name": "Prénom Nom", "discord": "pseudo#0001", "role": "employe" }
-   ```
-   (`role` peut être `admin` ou `employe`. Le profil `employees` est créé automatiquement
-   par un trigger.)
-3. Sinon, un admin peut éditer le discord/rôle après coup depuis `/admin/employees`.
+Ça passe par une **Edge Function** (`supabase/functions/create-employee`) qui :
+- vérifie que l'appelant est bien authentifié et admin (sinon rejet),
+- utilise la clé `service_role` **côté serveur uniquement** (jamais exposée au client)
+  pour créer le compte Auth via `auth.admin.createUser()`,
+- le profil `employees` (discord, rôle, nom) est ensuite rempli automatiquement par le
+  trigger `on_auth_user_created` à partir des métadonnées transmises.
+
+Pour déployer la fonction après une modification :
+
+```bash
+npx supabase functions deploy create-employee --use-api
+```
+
+Alternative manuelle (sans passer par l'UI) : Dashboard Supabase → **Authentication →
+Users → Add user**, avec **Auto Confirm User** coché et, dans **User Metadata** :
+```json
+{ "full_name": "Prénom Nom", "discord": "pseudo#0001", "role": "employe" }
+```
 
 ### Variables d'environnement
 
@@ -122,4 +133,5 @@ src/
   lib/supabase.ts    client + types Supabase
   App.tsx            routeur (HashRouter)
 supabase/migrations/  schéma SQL versionné (tables + RLS + fonctions RPC)
+supabase/functions/    Edge Functions (create-employee : création de compte, service_role)
 ```

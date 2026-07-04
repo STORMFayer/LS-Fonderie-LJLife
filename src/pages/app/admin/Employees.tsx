@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'
-import { Search, RefreshCw, Pencil, Check, X } from 'lucide-react'
+import { useEffect, useState, type FormEvent } from 'react'
+import { Search, RefreshCw, Pencil, Check, X, UserPlus } from 'lucide-react'
 import { supabase, type Employee } from '@/lib/supabase'
 import { Card } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
@@ -14,6 +14,16 @@ export function Employees() {
   const [editDiscord, setEditDiscord] = useState('')
   const [editRole, setEditRole] = useState<'admin' | 'employe'>('employe')
   const [prixMinerai, setPrixMinerai] = useState(60)
+
+  const [showAdd, setShowAdd] = useState(false)
+  const [prenom, setPrenom] = useState('')
+  const [nom, setNom] = useState('')
+  const [discord, setDiscord] = useState('')
+  const [password, setPassword] = useState('')
+  const [role, setRole] = useState<'admin' | 'employe'>('employe')
+  const [addError, setAddError] = useState<string | null>(null)
+  const [addSuccess, setAddSuccess] = useState<string | null>(null)
+  const [submitting, setSubmitting] = useState(false)
 
   async function load() {
     setLoading(true)
@@ -42,6 +52,36 @@ export function Employees() {
     await load()
   }
 
+  function resetAddForm() {
+    setPrenom('')
+    setNom('')
+    setDiscord('')
+    setPassword('')
+    setRole('employe')
+  }
+
+  async function handleAddEmployee(e: FormEvent) {
+    e.preventDefault()
+    setAddError(null)
+    setAddSuccess(null)
+    setSubmitting(true)
+
+    const { data, error } = await supabase.functions.invoke('create-employee', {
+      body: { prenom, nom, discord, password, role },
+    })
+
+    setSubmitting(false)
+
+    if (error || !data?.success) {
+      setAddError(data?.error ?? error?.message ?? 'Impossible de créer le compte.')
+      return
+    }
+
+    setAddSuccess(`Compte créé pour ${prenom} ${nom} (${discord}).`)
+    resetAddForm()
+    await load()
+  }
+
   const filtered = employees.filter((e) =>
     `${e.full_name} ${e.discord ?? ''}`.toLowerCase().includes(query.toLowerCase()),
   )
@@ -61,6 +101,84 @@ export function Employees() {
           <div className="font-display font-black text-2xl text-gold-light">{totalSalaire.toLocaleString('fr-FR')} $ · {employees.length} employés</div>
         </Card>
       </div>
+
+      <Card className="p-6">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="font-bold text-white">Ajouter un employé</h2>
+          <Button size="sm" variant={showAdd ? 'ghost' : 'gold'} onClick={() => setShowAdd((v) => !v)}>
+            <UserPlus size={14} /> {showAdd ? 'Fermer' : 'Nouveau compte'}
+          </Button>
+        </div>
+
+        {showAdd && (
+          <form onSubmit={handleAddEmployee} className="flex flex-col gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="text-xs uppercase tracking-[2px] text-white/40 font-semibold mb-1.5 block">Prénom</label>
+                <input
+                  required
+                  value={prenom}
+                  onChange={(e) => setPrenom(e.target.value)}
+                  className="w-full rounded-lg bg-white/5 border border-white/12 px-3.5 py-2.5 text-sm text-white outline-none focus:border-gold/50"
+                />
+              </div>
+              <div>
+                <label className="text-xs uppercase tracking-[2px] text-white/40 font-semibold mb-1.5 block">Nom</label>
+                <input
+                  required
+                  value={nom}
+                  onChange={(e) => setNom(e.target.value)}
+                  className="w-full rounded-lg bg-white/5 border border-white/12 px-3.5 py-2.5 text-sm text-white outline-none focus:border-gold/50"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="text-xs uppercase tracking-[2px] text-white/40 font-semibold mb-1.5 block">Discord</label>
+              <input
+                required
+                value={discord}
+                onChange={(e) => setDiscord(e.target.value)}
+                placeholder="pseudo#0001"
+                className="w-full rounded-lg bg-white/5 border border-white/12 px-3.5 py-2.5 text-sm text-white outline-none focus:border-gold/50"
+              />
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="text-xs uppercase tracking-[2px] text-white/40 font-semibold mb-1.5 block">Mot de passe</label>
+                <input
+                  type="password"
+                  required
+                  minLength={8}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="8 caractères minimum"
+                  className="w-full rounded-lg bg-white/5 border border-white/12 px-3.5 py-2.5 text-sm text-white outline-none focus:border-gold/50"
+                />
+              </div>
+              <div>
+                <label className="text-xs uppercase tracking-[2px] text-white/40 font-semibold mb-1.5 block">Rôle</label>
+                <select
+                  value={role}
+                  onChange={(e) => setRole(e.target.value as 'admin' | 'employe')}
+                  className="w-full rounded-lg bg-white/5 border border-white/12 px-3.5 py-2.5 text-sm text-white outline-none focus:border-gold/50"
+                >
+                  <option value="employe">Employé</option>
+                  <option value="admin">Admin</option>
+                </select>
+              </div>
+            </div>
+
+            {addError && <p className="text-red-400 text-xs">{addError}</p>}
+            {addSuccess && <p className="text-emerald-400 text-xs">{addSuccess}</p>}
+
+            <Button type="submit" variant="gold" disabled={submitting} className="w-full sm:w-auto sm:self-start">
+              <UserPlus size={14} /> {submitting ? 'Création...' : 'Créer le compte'}
+            </Button>
+          </form>
+        )}
+      </Card>
 
       <Card className="p-6">
         <div className="flex items-center gap-3 mb-5">
