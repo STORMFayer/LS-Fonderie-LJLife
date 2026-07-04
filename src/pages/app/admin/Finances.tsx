@@ -112,7 +112,7 @@ export function Finances() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="text-white text-sm font-semibold truncate">{e.full_name}</div>
-                    <div className="text-white/30 text-xs">{e.total_minerais} min · salaire: {salaire.toLocaleString('fr-FR')} $</div>
+                    <div className="text-white/30 text-xs">{e.total_minerais} minerais · salaire: {salaire.toLocaleString('fr-FR')} $</div>
                   </div>
                   {reste <= 0
                     ? <Badge variant="gold">Payé</Badge>

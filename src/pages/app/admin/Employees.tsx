@@ -214,7 +214,7 @@ export function Employees() {
                   <div className="text-white/30 text-xs">{e.discord ?? '—'} · {e.role}</div>
                 </div>
                 <div className="text-right shrink-0">
-                  <div className="text-white text-sm font-bold">{e.total_minerais.toLocaleString('fr-FR')} min</div>
+                  <div className="text-white text-sm font-bold">{e.total_minerais.toLocaleString('fr-FR')} minerais</div>
                   <div className="text-gold-light text-xs">{(e.total_minerais * prixMinerai).toLocaleString('fr-FR')} $</div>
                 </div>
                 <button onClick={() => startEdit(e)} className="text-white/30 hover:text-white p-1.5">

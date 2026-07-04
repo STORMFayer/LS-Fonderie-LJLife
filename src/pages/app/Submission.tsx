@@ -5,7 +5,7 @@ import { useAuth } from '@/auth/AuthContext'
 import { Card } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
 import { SuccessModal } from '@/components/SuccessModal'
-import lingot from '@/assets/lingot.png'
+import minerai from '@/assets/minerai.png'
 
 export function Submission() {
   const { refreshEmployee } = useAuth()
@@ -37,7 +37,7 @@ export function Submission() {
   return (
     <div className="max-w-md mx-auto">
       <Card className="p-8 text-center">
-        <img src={lingot} alt="" className="w-24 h-24 object-contain mx-auto mb-5 drop-shadow-xl" />
+        <img src={minerai} alt="" className="w-24 h-24 object-contain mx-auto mb-5 drop-shadow-xl" />
         <h1 className="font-display font-black text-xl text-white mb-1">Soumettre du minerai</h1>
         <p className="text-white/40 text-sm mb-6">Déclare la quantité de minerai raffiné livrée à la forge.</p>
 
