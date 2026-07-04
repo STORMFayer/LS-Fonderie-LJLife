@@ -80,9 +80,9 @@ export function OrderCatalogue({
           <p className="text-white/40">{subtitle}</p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-10">
+        <div className="flex flex-wrap justify-center gap-5 mb-10">
           {prices.map((p) => (
-            <Card key={p.key} className="p-5 flex flex-col items-center text-center">
+            <Card key={p.key} className="p-5 flex flex-col items-center text-center w-full sm:w-56">
               {productImages[p.key] && (
                 <img
                   src={productImages[p.key]}

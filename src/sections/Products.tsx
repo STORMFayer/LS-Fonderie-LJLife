@@ -3,17 +3,9 @@ import { Reveal } from '@/components/Reveal'
 import { Card } from '@/components/ui/Card'
 import { Badge } from '@/components/ui/Badge'
 import lingot from '@/assets/lingot.png'
-import plaqueFer from '@/assets/plaque_fer.png'
-import plaqueCeram from '@/assets/plaque_ceram.png'
-import ressort from '@/assets/ressort.png'
-import minerai from '@/assets/minerai.png'
 
 const products = [
   { img: lingot, name: 'Lingot de fer', price: '130 $', desc: 'Coulé et raffiné à la main, pureté garantie.' },
-  { img: plaqueFer, name: 'Plaque de fer', price: '85 $', desc: 'Blindage brut prêt pour assemblage industriel.' },
-  { img: plaqueCeram, name: 'Plaque céramique', price: '210 $', desc: 'Résistance thermique extrême, finition mate.' },
-  { img: ressort, name: 'Ressort renforcé', price: '60 $', desc: 'Acier trempé, tenu pour usage intensif.' },
-  { img: minerai, name: 'Minerai brut', price: '35 $', desc: 'Matière première extraite et triée sur site.' },
 ]
 
 export function Products() {
@@ -30,9 +22,9 @@ export function Products() {
           </p>
         </Reveal>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="flex justify-center">
           {products.map((p, i) => (
-            <Reveal key={p.name} delay={(i % 3) * 0.1}>
+            <Reveal key={p.name} delay={(i % 3) * 0.1} className="w-full max-w-sm">
               <motion.div whileHover={{ y: -6 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }}>
                 <Card className="card-glow p-6 h-full flex flex-col group">
                   <div className="relative rounded-xl bg-gradient-to-br from-white/8 to-transparent p-6 mb-5 flex items-center justify-center overflow-hidden">
@@ -42,7 +34,7 @@ export function Products() {
                       src={p.img}
                       alt={p.name}
                       className="w-28 h-28 object-contain relative z-10 drop-shadow-xl group-hover:scale-110 transition-transform duration-500"
-                      style={p.name === 'Lingot de fer' ? { transform: 'translate(3%, -2%)' } : undefined}
+                      style={{ transform: 'translate(3%, -2%)' }}
                     />
                   </div>
                   <h3 className="font-bold text-white text-lg mb-1.5">{p.name}</h3>
