@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { ChevronDown, RefreshCw } from 'lucide-react'
+import { ChevronDown, RefreshCw, Trash2 } from 'lucide-react'
 import { supabase, type Order, type OrderStatut } from '@/lib/supabase'
 import { Card } from '@/components/ui/Card'
 import { Badge } from '@/components/ui/Badge'
@@ -25,6 +25,7 @@ export function Orders() {
   const [filter, setFilter] = useState<'tous' | OrderStatut>('tous')
   const [expanded, setExpanded] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
+  const [confirmDelete, setConfirmDelete] = useState<string | null>(null)
 
   async function load() {
     setLoading(true)
@@ -39,6 +40,12 @@ export function Orders() {
 
   async function changeStatus(numero: string, statut: OrderStatut) {
     await supabase.rpc('update_order_status', { p_numero: numero, p_statut: statut })
+    await load()
+  }
+
+  async function deleteOrder(numero: string) {
+    await supabase.rpc('delete_order', { p_numero: numero })
+    setConfirmDelete(null)
     await load()
   }
 
@@ -105,6 +112,22 @@ export function Orders() {
                       </Button>
                     ))}
                   </div>
+
+                  {o.statut === 'annulee' && (
+                    <div className="pt-3 border-t border-white/8">
+                      {confirmDelete === o.numero ? (
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span className="text-red-400 text-xs">Supprimer définitivement cette commande ?</span>
+                          <Button size="sm" variant="danger" onClick={() => deleteOrder(o.numero)}>Confirmer</Button>
+                          <Button size="sm" variant="ghost" onClick={() => setConfirmDelete(null)}>Annuler</Button>
+                        </div>
+                      ) : (
+                        <Button size="sm" variant="ghost" onClick={() => setConfirmDelete(o.numero)}>
+                          <Trash2 size={13} /> Supprimer la commande
+                        </Button>
+                      )}
+                    </div>
+                  )}
                 </div>
               )}
             </Card>
