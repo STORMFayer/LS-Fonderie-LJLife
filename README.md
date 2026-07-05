@@ -94,7 +94,7 @@ npx supabase functions deploy create-employee --use-api
 Alternative manuelle (sans passer par l'UI) : Dashboard Supabase → **Authentication →
 Users → Add user**, avec **Auto Confirm User** coché et, dans **User Metadata** :
 ```json
-{ "full_name": "Prénom Nom", "discord": "pseudo#0001", "role": "employe" }
+{ "full_name": "Prénom Nom", "discord": "551106395269758977", "role": "employe" }
 ```
 
 ### Modifier / supprimer un employé

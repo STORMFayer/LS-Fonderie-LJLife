@@ -204,12 +204,12 @@ export function Employees() {
             </div>
 
             <div>
-              <label className="text-xs uppercase tracking-[2px] text-white/40 font-semibold mb-1.5 block">Discord</label>
+              <label className="text-xs uppercase tracking-[2px] text-white/40 font-semibold mb-1.5 block">ID Discord</label>
               <input
                 required
                 value={discord}
                 onChange={(e) => setDiscord(e.target.value)}
-                placeholder="pseudo#0001"
+                placeholder="551106395269758977"
                 className="w-full rounded-lg bg-white/5 border border-white/12 px-3.5 py-2.5 text-sm text-white outline-none focus:border-gold/50"
               />
             </div>
@@ -298,7 +298,7 @@ export function Employees() {
                     <input
                       value={editDiscord}
                       onChange={(ev) => setEditDiscord(ev.target.value)}
-                      placeholder="Discord (pseudo#0001)"
+                      placeholder="ID Discord (551106395269758977)"
                       className="flex-1 rounded-lg bg-white/5 border border-white/12 px-3 py-2 text-sm text-white outline-none focus:border-gold/50"
                     />
                     <select

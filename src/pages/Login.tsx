@@ -86,14 +86,14 @@ export function Login() {
       <Card className="relative z-10 w-full max-w-sm p-7">
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div>
-            <label className="text-xs uppercase tracking-[2px] text-white/40 font-semibold mb-1.5 block">Discord</label>
+            <label className="text-xs uppercase tracking-[2px] text-white/40 font-semibold mb-1.5 block">ID Discord</label>
             <input
               type="text"
               required
               value={discord}
               onChange={(e) => setDiscord(e.target.value)}
               className="w-full rounded-lg bg-white/5 border border-white/12 px-3.5 py-2.5 text-sm text-white outline-none focus:border-gold/50 transition-colors"
-              placeholder="pseudo#0001"
+              placeholder="551106395269758977"
             />
           </div>
           <div>
