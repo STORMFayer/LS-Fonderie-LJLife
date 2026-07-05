@@ -5,7 +5,6 @@ import { AdminRoute } from '@/auth/AdminRoute'
 import { Home } from '@/pages/Home'
 import { Login } from '@/pages/Login'
 import { Tracking } from '@/pages/Tracking'
-import { OrderLegal } from '@/pages/OrderLegal'
 import { OrderBlack } from '@/pages/OrderBlack'
 import { AppLayout } from '@/pages/app/AppLayout'
 import { Dashboard } from '@/pages/app/Dashboard'
@@ -26,7 +25,6 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/suivi" element={<Tracking />} />
-          <Route path="/commander" element={<OrderLegal />} />
           <Route path="/marche-noir" element={<OrderBlack />} />
 
           <Route

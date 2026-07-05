@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
-import { ArrowRight, ChevronDown } from 'lucide-react'
+import { MapPin, ChevronDown } from 'lucide-react'
 import { Embers } from '@/components/Embers'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
@@ -43,16 +43,16 @@ export function Hero() {
         </h1>
 
         <p className="text-white/50 text-base sm:text-lg max-w-xl mb-9 leading-relaxed">
-          Lingots, plaques et pièces sur mesure — coulés à la main dans notre forge et
-          livrés partout, sans compromis sur la qualité.
+          Pièces sur mesure, coulées à la main dans notre forge et livrées partout,
+          sans compromis sur la qualité.
         </p>
 
         <div className="flex flex-col sm:flex-row items-center gap-4">
-          <Button size="lg" variant="gold" onClick={() => navigate('/commander')}>
-            Commander un lingot <ArrowRight size={18} />
+          <Button size="lg" variant="gold" onClick={() => navigate('/suivi')}>
+            Suivre ma commande <MapPin size={18} />
           </Button>
-          <Button size="lg" variant="ghost" onClick={() => document.querySelector('#produits')?.scrollIntoView({ behavior: 'smooth' })}>
-            Voir le catalogue
+          <Button size="lg" variant="ghost" onClick={() => document.querySelector('#process')?.scrollIntoView({ behavior: 'smooth' })}>
+            Notre savoir-faire
           </Button>
         </div>
       </motion.div>

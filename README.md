@@ -56,9 +56,10 @@ Supabase Auth (mots de passe gérés nativement, jamais stockés en clair).
 - Journal : historique de toute l'activité, purge alertes/avances.
 - Réglages : édition des tarifs, reset complet de la semaine (irréversible).
 
-**Pages publiques** : `/commander` (lingots), `/suivi` (suivi de commande par numéro),
-`/marche-noir` (accessible via le point discret en bas du footer — easter egg comme
-l'original — avec l'avertissement 70% argent propre / 30% argent sale).
+**Pages publiques** : `/suivi` (suivi de commande par numéro), `/marche-noir`
+(accessible via le point discret en bas du footer — easter egg comme l'original — avec
+l'avertissement 70% argent propre / 30% argent sale). Il n'y a plus de vente légale
+publique ni de catalogue vitrine : seul le marché noir permet de commander.
 
 Toutes les mutations passent par des fonctions RPC Postgres (`SECURITY DEFINER`) qui
 vérifient elles-mêmes les permissions (admin ou non) — les tables restent verrouillées
@@ -111,8 +112,8 @@ npx supabase functions deploy manage-employee --use-api
 
 ### Notifications Discord
 
-Chaque commande passée (`/commander` ou `/marche-noir`) envoie automatiquement un
-message dans un salon Discord via une **Edge Function** (`supabase/functions/notify-order`) :
+Chaque commande passée sur `/marche-noir` envoie automatiquement un message dans un
+salon Discord via une **Edge Function** (`supabase/functions/notify-order`) :
 
 - Le front appelle `notify-order` juste après `place_order`, avec seulement le numéro
   de commande (pas le détail — évite qu'un client falsifie le contenu du message).

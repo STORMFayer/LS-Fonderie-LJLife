@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Link } from 'react-router-dom'
-import { Menu, X, Flame, Lock } from 'lucide-react'
+import { Link, useNavigate } from 'react-router-dom'
+import { Menu, X, MapPin, Lock } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import logo from '@/assets/logo.png'
 
 const links = [
-  { id: 'produits', label: 'Produits' },
   { id: 'process', label: 'Processus' },
   { id: 'avis', label: 'Avis' },
   { id: 'contact', label: 'Contact' },
@@ -19,6 +18,7 @@ function scrollToId(id: string) {
 export function Nav() {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
+  const navigate = useNavigate()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24)
@@ -51,8 +51,8 @@ export function Nav() {
           <Link to="/login" className="text-white/40 hover:text-white text-xs uppercase tracking-[1.5px] font-semibold flex items-center gap-1.5 transition-colors">
             <Lock size={12} /> Espace Employé
           </Link>
-          <Button size="sm" variant="gold" onClick={() => scrollToId('contact')}>
-            <Flame size={15} /> Commander
+          <Button size="sm" variant="gold" onClick={() => navigate('/suivi')}>
+            <MapPin size={15} /> Suivre ma commande
           </Button>
         </div>
 

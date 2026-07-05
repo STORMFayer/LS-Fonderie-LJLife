@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { ArrowRight } from 'lucide-react'
+import { MapPin } from 'lucide-react'
 import { Embers } from '@/components/Embers'
 import { Reveal } from '@/components/Reveal'
 import { Button } from '@/components/ui/Button'
@@ -16,17 +16,14 @@ export function CTA() {
       <Embers count={10} />
       <Reveal className="relative z-10 max-w-2xl mx-auto text-center">
         <h2 className="font-display font-black text-3xl sm:text-5xl text-white tracking-tight mb-5">
-          Prêt à passer commande&nbsp;?
+          Une commande en cours&nbsp;?
         </h2>
         <p className="text-white/50 text-lg mb-10">
-          Contactez la forge et recevez votre devis en moins de 24h.
+          Entre ton numéro de suivi pour connaître son statut en temps réel.
         </p>
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <Button size="lg" variant="gold" onClick={() => navigate('/commander')}>
-            Commander <ArrowRight size={18} />
-          </Button>
-          <Button size="lg" variant="outline" onClick={() => navigate('/suivi')}>
-            Suivre ma commande
+        <div className="flex items-center justify-center">
+          <Button size="lg" variant="gold" onClick={() => navigate('/suivi')}>
+            Suivre ma commande <MapPin size={18} />
           </Button>
         </div>
       </Reveal>

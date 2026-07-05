@@ -1,7 +1,6 @@
 import { Nav } from '@/sections/Nav'
 import { Hero } from '@/sections/Hero'
 import { Stats } from '@/sections/Stats'
-import { Products } from '@/sections/Products'
 import { Process } from '@/sections/Process'
 import { Testimonials } from '@/sections/Testimonials'
 import { CTA } from '@/sections/CTA'
@@ -14,7 +13,6 @@ export function Home() {
       <main>
         <Hero />
         <Stats />
-        <Products />
         <Process />
         <Testimonials />
         <CTA />
