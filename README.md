@@ -56,6 +56,14 @@ Supabase Auth (mots de passe gérés nativement, jamais stockés en clair).
 - Journal : historique de toute l'activité, purge alertes/avances.
 - Réglages : édition des tarifs, reset complet de la semaine (irréversible).
 
+**Notifications admin en temps réel** : dès qu'une commande arrive (`/marche-noir`) ou
+qu'un employé signale une alerte de stock, un toast apparaît en haut à droite pour tout
+admin connecté (n'importe quelle page de l'espace employé), via Supabase Realtime sur
+la table `journal` — pas de rafraîchissement nécessaire. Cliquer sur le toast ouvre la
+page Commandes ou Journal correspondante ; il se referme seul après 8s. Réservé aux
+admins (RLS sur `journal` limite déjà l'accès, `AdminNotifications` n'est monté que si
+`employee.role === 'admin'`).
+
 **Pages publiques** : `/suivi` (suivi de commande par numéro), `/marche-noir`
 (accessible via le point discret en bas du footer — easter egg comme l'original — avec
 l'avertissement 70% argent propre / 30% argent sale). Il n'y a plus de vente légale

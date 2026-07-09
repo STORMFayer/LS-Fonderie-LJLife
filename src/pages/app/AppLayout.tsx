@@ -3,6 +3,7 @@ import { LogOut } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/auth/AuthContext'
 import { Button } from '@/components/ui/Button'
+import { AdminNotifications } from '@/components/AdminNotifications'
 import { cn } from '@/lib/utils'
 import logo from '@/assets/logo.png'
 
@@ -62,6 +63,8 @@ export function AppLayout() {
           </Button>
         </div>
       </header>
+
+      {employee?.role === 'admin' && <AdminNotifications />}
 
       <main className="max-w-6xl mx-auto px-5 py-10">
         <Outlet />
