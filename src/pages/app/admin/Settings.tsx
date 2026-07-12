@@ -8,7 +8,9 @@ export function Settings() {
   const [prices, setPrices] = useState<Price[]>([])
   const [edits, setEdits] = useState<Record<string, string>>({})
   const [status, setStatus] = useState<string | null>(null)
+  const [statusError, setStatusError] = useState(false)
   const [confirmingReset, setConfirmingReset] = useState(false)
+  const [resetting, setResetting] = useState(false)
 
   async function load() {
     const { data } = await supabase.from('prices').select('*').order('type')
@@ -22,9 +24,16 @@ export function Settings() {
   const pendingKeys = Object.keys(edits).filter((k) => edits[k] !== '' && Number(edits[k]) !== prices.find((p) => p.key === k)?.price)
 
   async function savePrices() {
+    setStatus(null)
+    setStatusError(false)
     for (const key of pendingKeys) {
       const price = prices.find((p) => p.key === key)!
-      await supabase.rpc('save_price', { p_key: key, p_type: price.type, p_label: price.label, p_price: Number(edits[key]) })
+      const { error } = await supabase.rpc('save_price', { p_key: key, p_type: price.type, p_label: price.label, p_price: Number(edits[key]) })
+      if (error) {
+        setStatus(`Échec de la sauvegarde : ${error.message}`)
+        setStatusError(true)
+        return
+      }
     }
     setEdits({})
     setStatus('Prix sauvegardés.')
@@ -32,7 +41,16 @@ export function Settings() {
   }
 
   async function resetWeek() {
-    await supabase.rpc('reset_week')
+    setResetting(true)
+    setStatus(null)
+    setStatusError(false)
+    const { error } = await supabase.rpc('reset_week')
+    setResetting(false)
+    if (error) {
+      setStatus(`Échec du reset : ${error.message}`)
+      setStatusError(true)
+      return
+    }
     setConfirmingReset(false)
     setStatus('Reset de la semaine effectué.')
   }
@@ -78,13 +96,15 @@ export function Settings() {
           <Button size="sm" variant="ghost" onClick={() => setConfirmingReset(true)}>Lancer le reset</Button>
         ) : (
           <div className="flex gap-2">
-            <Button size="sm" variant="danger" onClick={resetWeek}>Confirmer le reset</Button>
+            <Button size="sm" variant="danger" disabled={resetting} onClick={resetWeek}>
+              {resetting ? 'Reset en cours...' : 'Confirmer le reset'}
+            </Button>
             <Button size="sm" variant="ghost" onClick={() => setConfirmingReset(false)}>Annuler</Button>
           </div>
         )}
       </Card>
 
-      {status && <p className="text-emerald-400 text-sm">{status}</p>}
+      {status && <p className={statusError ? 'text-red-400 text-sm' : 'text-emerald-400 text-sm'}>{status}</p>}
     </div>
   )
 }
