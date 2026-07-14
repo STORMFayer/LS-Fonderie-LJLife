@@ -236,8 +236,8 @@ export function Employees() {
                   onChange={(e) => setRole(e.target.value as 'admin' | 'employe')}
                   className="w-full rounded-lg bg-white/5 border border-white/12 px-3.5 py-2.5 text-sm text-white outline-none focus:border-gold/50"
                 >
-                  <option value="employe">Employé</option>
-                  <option value="admin">Admin</option>
+                  <option className="bg-[#1a1712] text-white" value="employe">Employé</option>
+                  <option className="bg-[#1a1712] text-white" value="admin">Admin</option>
                 </select>
               </div>
             </div>

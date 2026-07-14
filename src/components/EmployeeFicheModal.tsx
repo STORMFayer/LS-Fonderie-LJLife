@@ -99,9 +99,9 @@ export function EmployeeFicheModal({ employee, onClose }: { employee: Employee; 
                   onChange={(e) => setCategory(e.target.value as NoteCategory)}
                   className="rounded-lg bg-white/5 border border-white/12 px-3 py-2 text-sm text-white outline-none focus:border-gold/50"
                 >
-                  <option value="general">Note générale</option>
-                  <option value="avertissement">Avertissement</option>
-                  <option value="rendement">Rendement</option>
+                  <option className="bg-[#1a1712] text-white" value="general">Note générale</option>
+                  <option className="bg-[#1a1712] text-white" value="avertissement">Avertissement</option>
+                  <option className="bg-[#1a1712] text-white" value="rendement">Rendement</option>
                 </select>
               </div>
               <textarea
